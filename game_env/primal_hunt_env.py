@@ -2,11 +2,11 @@ import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
 from dataclasses import dataclass
-from typing import Tuple, Dict, List, Optional
+from typing import Tuple, Optional
 
 
 # ----------------------------
-# Cell type tags (for clarity)
+# Cell type tags
 # ----------------------------
 HOME = 0
 VEG_FRUIT = 1
@@ -24,7 +24,7 @@ ACTIONS = [ACTION_LEFT, ACTION_UP, ACTION_RIGHT, ACTION_DOWN]
 @dataclass(frozen=True)
 class Config:
     grid_size: int = 5
-    episode_len: int = 10
+    episode_len: int = 12
     # Fixed coordinates (row, col), 0-based
     home: Tuple[int, int] = (2, 2)
     veg_fruit: Tuple[Tuple[int, int], ...] = ((0, 4), (1, 1), (2, 0), (3, 3))
@@ -37,12 +37,12 @@ class Config:
 
 class PrimalHuntEnv(gym.Env):
     """
-    5x5 grid, 10-step episodes.
-    Observation = [one-hot position (25), steps_left/10, cumulative_energy/20] -> shape (27,)
-    Reward per step: ΔE = Food - (Effort + Injury), sampled per cell type.
-    No early termination, no terminal bonus. Action masking provided in info['action_mask'].
+    5x5 grid, 12-step episodes.
+    Observation = [one-hot position (25), steps_left/12, cumulative_energy/20] -> shape (27,)
+    Reward per step is net Energy: ΔE = Food - (Effort + Energy Required for Recovery from Injury), sampled per cell type.
+    No early termination, no terminal bonus. Valid actions provided in info['valid_actions'].
     """
-    metadata = {"render_modes": []}
+    metadata = {"render_modes": []}  # ?
 
     def __init__(self, config: Optional[Config] = None, seed: Optional[int] = None):
         super().__init__()
@@ -65,8 +65,6 @@ class PrimalHuntEnv(gym.Env):
         self._steps_left: int = self.cfg.episode_len
         self._cum_energy: float = 0.0
 
-    # ------------- Gym API -------------
-
     def seed(self, seed: Optional[int] = None):
         self.rng = np.random.default_rng(seed)
 
@@ -77,14 +75,14 @@ class PrimalHuntEnv(gym.Env):
         self._steps_left = self.cfg.episode_len
         self._cum_energy = 0.0
         obs = self._build_obs()
-        info = {"action_mask": self._action_mask(self._pos)}
+        info = {"valid_actions": self.filter_valid_actions(self._pos)}
         return obs, info
 
     def step(self, action: int):
         assert self.action_space.contains(action), "Invalid action index."
-        # Mask invalid moves (off-grid). If invalid is chosen, we simply stay in place and count the step.
-        valid_mask = self._action_mask(self._pos)
-        if not valid_mask[action]:
+        # Filter valid actions (filtering out off-grid actions). If invalid is chosen, we simply stay in place and count the step.
+        valid_actions = self.filter_valid_actions(self._pos)
+        if not valid_actions[action]:
             next_pos = self._pos  # stays
         else:
             next_pos = self._move(self._pos, action)
@@ -98,14 +96,12 @@ class PrimalHuntEnv(gym.Env):
         self._pos = next_pos
         self._steps_left -= 1
 
-        terminated = (self._steps_left == 0)
+        terminated = (self._steps_left <= 0)
         truncated = False
 
         obs = self._build_obs()
-        info = {"action_mask": self._action_mask(self._pos)}
+        info = {"valid_actions": self.filter_valid_actions(self._pos)}
         return obs, reward, terminated, truncated, info
-
-    # ------------- Helpers -------------
 
     def _place_cells(self):
         self._grid[:, :] = EMPTY
@@ -125,7 +121,7 @@ class PrimalHuntEnv(gym.Env):
         idx = self._pos[0] * self.cfg.grid_size + self._pos[1]
         one_hot[idx] = 1.0
         steps_feat = np.array(
-            [self._steps_left / self.cfg.episode_len], dtype=np.float32)
+            [self._steps_left], dtype=np.int32)
         energy_feat = np.array(
             [self._cum_energy / self.cfg.energy_norm], dtype=np.float32)
         return np.concatenate([one_hot, steps_feat, energy_feat], axis=0)
@@ -141,13 +137,10 @@ class PrimalHuntEnv(gym.Env):
         if action == ACTION_DOWN:
             r += 1
 
-        # Clamp inside grid (we only call _move if valid; this is a safeguard)
-        r = int(np.clip(r, 0, self.cfg.grid_size - 1))
-        c = int(np.clip(c, 0, self.cfg.grid_size - 1))
         return (r, c)
 
-    def _action_mask(self, pos: Tuple[int, int]) -> np.ndarray:
-        """Boolean mask over [U, D, L, R]; True = valid from current cell."""
+    def filter_valid_actions(self, pos: Tuple[int, int]) -> np.ndarray:
+        """Filter valid actions [L, U, R, D]; True = valid from current cell."""
         r, c = pos
         n = self.cfg.grid_size
         valid = np.array([
@@ -221,16 +214,16 @@ class PrimalHuntEnv(gym.Env):
 if __name__ == "__main__":
     env = PrimalHuntEnv()
     obs, info = env.reset(seed=42)
-    print("obs shape:", obs.shape)
-    print("mask at start:", info["action_mask"])
+    print("Observation:", obs)
+    print("Valid actions from HOME:", info["valid_actions"])
 
-    ep_return = 0.0
-    for t in range(10):
+    episode_return = 0.0
+    for t in range(13):
         # sample only valid actions
-        valid = np.flatnonzero(info["action_mask"])
-        a = np.random.choice(valid)
-        obs, r, term, trunc, info = env.step(a)
-        ep_return += r
-        print(f"t={t:02d} a={a} r={r:.2f} done={term}")
+        valid_actions = np.flatnonzero(info["valid_actions"])
+        action = np.random.choice(valid_actions)
+        obs, reward, terminated, trunctuated, info = env.step(action)
+        episode_return += reward
+        print(f"t={t} a={action} r={reward:.2f} done={terminated}")
 
-    print("episode return:", ep_return)
+    print("episode return:", episode_return)

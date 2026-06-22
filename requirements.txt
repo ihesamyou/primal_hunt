@@ -3,6 +3,9 @@ ipykernel==7.1.0
 ipython==9.7.0
 jupyter_client==8.6.3
 matplotlib==3.10.7
+nbclient==0.10.2
+nbconvert==7.16.6
+nbformat==5.10.4
 numpy==2.3.4
 pandas==2.3.3
 pillow==12.0.0

@@ -1,0 +1,114 @@
+{
+  "run_id": "V1",
+  "seed": 44,
+  "episodes": 5000,
+  "mean_objective_return": -1.3329953724258008,
+  "mean_final_energy": -1.3329953724258008,
+  "survival_rate": 0.4302,
+  "td_loss_mean": 79.07055233146647,
+  "evaluation": {
+    "episodes": 500,
+    "mean_objective_return": 9.490324719151369,
+    "objective_return_std": 32.01290264560582,
+    "survival_rate": 0.464,
+    "mean_final_energy": 9.490324719151369,
+    "final_energy_std": 32.01290264560582,
+    "mean_survivor_energy": 42.02742065746936,
+    "mean_failure_energy": -18.67611654088509
+  },
+  "config": {
+    "obs_dim": 52,
+    "n_actions": 4,
+    "hidden_dim": 64,
+    "gamma": 1.0,
+    "lr": 0.0003,
+    "batch_size": 256,
+    "buffer_size": 100000,
+    "min_buffer_size": 1000,
+    "epsilon_start": 1.0,
+    "epsilon_end": 0.05,
+    "epsilon_decay": 30000,
+    "target_update_freq": 25,
+    "train_freq": 1,
+    "gradient_clip": 5.0,
+    "use_replay": true,
+    "use_target": true,
+    "use_double_q": false,
+    "device": null
+  },
+  "environment": {
+    "grid_size": 5,
+    "episode_len": 6,
+    "survival_threshold": 0.0,
+    "observation_energy_scale": 100.0,
+    "home": [
+      2,
+      2
+    ],
+    "veg_fruit": [
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        3
+      ]
+    ],
+    "small_animals": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        4,
+        0
+      ]
+    ],
+    "big_animals": [
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        4
+      ]
+    ],
+    "obstacles": [
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ]
+    ]
+  },
+  "experiment": {
+    "use_replay": true,
+    "use_target": true,
+    "use_double_q": false
+  }
+}

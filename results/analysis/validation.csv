@@ -1,0 +1,8 @@
+check,value
+Configurations,"A, B, C, D"
+Seeds per configuration,5
+Episodes per seed,5000
+Duplicate episode rows,0
+Non-finite recorded losses,0
+Final epsilon (mean),0.05000000000000001
+Periodic evaluations per seed,21

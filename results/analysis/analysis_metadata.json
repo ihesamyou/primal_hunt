@@ -1,0 +1,18 @@
+{
+  "rolling_window": 200,
+  "energy_samples_per_cell": 20000,
+  "runs": [
+    "A",
+    "B",
+    "C",
+    "D"
+  ],
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "episodes_per_seed": 5000
+}

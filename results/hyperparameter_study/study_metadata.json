@@ -1,0 +1,39 @@
+{
+  "episodes": 5000,
+  "final_evaluation_episodes": 500,
+  "periodic_evaluation_every": 250,
+  "periodic_evaluation_episodes": 100,
+  "development_seeds": [
+    11,
+    22,
+    33
+  ],
+  "validation_seeds": [
+    44,
+    55,
+    66
+  ],
+  "selected_factor_levels": {
+    "lr": {
+      "run_id": "H_LR_LOW",
+      "mean_final_energy": 9.407948752822996,
+      "value": 0.0003
+    },
+    "batch_size": {
+      "run_id": "H_BATCH_HIGH",
+      "mean_final_energy": 8.967672695906447,
+      "value": 256
+    },
+    "target_update": {
+      "run_id": "H_TARGET_LOW",
+      "mean_final_energy": 9.43520773732225,
+      "value": 25
+    },
+    "epsilon_decay": {
+      "run_id": "H00",
+      "mean_final_energy": 8.237270119750997,
+      "value": 30000
+    }
+  },
+  "selection_metric": "mean greedy-evaluation final energy"
+}

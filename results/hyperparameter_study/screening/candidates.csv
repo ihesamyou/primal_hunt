@@ -1,0 +1,10 @@
+run_id,lr,batch_size,target_update,epsilon_decay,warmup_steps,hidden_dim,varying_parameter,value
+H00,0.001,128,50,30000,1000,64,baseline,0.0
+H_LR_LOW,0.0003,128,50,30000,1000,64,lr,0.0003
+H_LR_HIGH,0.003,128,50,30000,1000,64,lr,0.003
+H_BATCH_LOW,0.001,64,50,30000,1000,64,batch_size,64.0
+H_BATCH_HIGH,0.001,256,50,30000,1000,64,batch_size,256.0
+H_TARGET_LOW,0.001,128,25,30000,1000,64,target_update,25.0
+H_TARGET_HIGH,0.001,128,100,30000,1000,64,target_update,100.0
+H_EPSILON_LOW,0.001,128,50,20000,1000,64,epsilon_decay,20000.0
+H_EPSILON_HIGH,0.001,128,50,40000,1000,64,epsilon_decay,40000.0

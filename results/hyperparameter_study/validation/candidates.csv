@@ -1,0 +1,3 @@
+run_id,lr,batch_size,target_update,epsilon_decay,warmup_steps,hidden_dim,varying_parameter,value
+V0,0.001,128,50,30000,1000,64,validation_baseline,0.0
+V1,0.0003,256,25,30000,1000,64,combined,0.0

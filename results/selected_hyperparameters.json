@@ -1,0 +1,14 @@
+{
+  "run_id": "V0",
+  "lr": 0.001,
+  "batch_size": 128,
+  "target_update": 50,
+  "warmup_steps": 1000,
+  "epsilon_decay": 30000,
+  "hidden_dim": 64,
+  "gamma": 1.0,
+  "buffer_size": 100000,
+  "train_freq": 1,
+  "validation_mean_final_energy": 9.284578274184238,
+  "validation_final_energy_std": 1.5388592907811625
+}

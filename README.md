@@ -1,5 +1,13 @@
 # Primal Hunt
 
+This project models a primitive hunter's daily survival problem as a finite-horizon Markov decision process. The hunter navigates a stochastic grid containing vegetation, animals, and obstacles, choosing risk-reward trade-offs to maximize final energy. A DQN agent learns from position, visited cells, remaining time, and cumulative energy using valid-action masking.
+
+The demonstration first tunes key hyperparameters and then compares full DQN against variants without experience replay, without a target network, and without either mechanism across five seeds. Training curves, greedy policy evaluations, stability metrics, maps, and policy animations illustrate how replay and target networks affect learning stability and final policy quality.
+
+![Full DQN greedy policy animation](results/animations/policy_A_seed303.gif)
+
+*Full DQN (configuration A) greedy policy trained with seed 303.*
+
 ## MDP
 
 Primal Hunt is a finite-horizon Markov decision process:

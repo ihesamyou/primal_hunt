@@ -4,9 +4,11 @@ This project models a primitive hunter's daily survival problem as a finite-hori
 
 The demonstration first tunes key hyperparameters and then compares full DQN against variants without experience replay, without a target network, and without either mechanism across five seeds. Training curves, greedy policy evaluations, stability metrics, maps, and policy animations illustrate how replay and target networks affect learning stability and final policy quality.
 
+
 ![Full DQN greedy policy animation](results/animations/policy_A_seed303.gif)
 
 *Full DQN (configuration A) greedy policy trained with seed 303.*
+
 
 ## MDP
 
